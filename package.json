@@ -1,0 +1,20 @@
+{
+  "name": "private-chat",
+  "version": "2.0.0",
+  "description": "私密房间聊天室（MongoDB 版）：账号密码登录 + 房间制实时交流 + 聊天历史",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "mongodb": "^6.8.0",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.43.1",
+    "socket.io-client": "^4.8.3"
+  }
+}

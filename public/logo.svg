@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14b8a6"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <!-- 渐变护盾（私密·安全） -->
+  <path d="M32 3 L55 11.5 V30 C55 45.5 44.5 54.5 32 61 C19.5 54.5 9 45.5 9 30 V11.5 Z"
+        fill="url(#lg)"/>
+  <!-- 护盾内侧高光描边 -->
+  <path d="M32 7 L51.5 14.3 V30 C51.5 43 42.6 50.8 32 56.5 C21.4 50.8 12.5 43 12.5 30 V14.3 Z"
+        fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.4"/>
+  <!-- 锁体 -->
+  <rect x="24.5" y="30.5" width="15" height="12.5" rx="3" fill="#ffffff"/>
+  <!-- 锁梁 -->
+  <path d="M27.6 30.5 V25.6 a4.4 4.4 0 0 1 8.8 0 V30.5"
+        fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <!-- 钥匙孔 -->
+  <circle cx="32" cy="35.2" r="2.3" fill="#0f766e"/>
+  <path d="M32 37 v3.2" stroke="#0f766e" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- 左下对话气泡（交流） -->
+  <circle cx="14.5" cy="47.5" r="4.6" fill="#ffffff" opacity="0.95"/>
+  <circle cx="23.5" cy="52.5" r="3.4" fill="#ffffff" opacity="0.65"/>
+  <!-- 右上星点 -->
+  <circle cx="48" cy="22" r="1.8" fill="#ffffff" opacity="0.85"/>
+</svg>

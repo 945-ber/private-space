@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="ocean">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>私密空间</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="vendor/socket.io.min.js"></script>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== 左侧导航 ===== -->
+    <aside class="nav">
+      <div class="nav-brand">
+        <img src="logo.svg" alt="logo" class="nav-logo">
+        <span>私密空间</span>
+      </div>
+      <div class="nav-item active" data-view="square" onclick="switchNav('square')">
+        <span class="nav-ico">🌐</span>广场
+      </div>
+      <div class="nav-item" data-view="rooms" onclick="switchNav('rooms')">
+        <span class="nav-ico">💬</span>房间
+      </div>
+      <div class="nav-item" data-view="dms" onclick="switchNav('dms')">
+        <span class="nav-ico">💌</span>私信<span id="dm-badge" class="nav-badge hidden">0</span>
+      </div>
+      <div class="nav-item" data-view="me" onclick="switchNav('me')">
+        <span class="nav-ico">⚙️</span>我的
+      </div>
+      <div class="nav-spacer"></div>
+      <div class="nav-user" onclick="openProfile(myName)">
+        <span id="nav-avatar"></span>
+        <div class="name" id="nav-username">--</div>
+      </div>
+      <button class="nav-logout" onclick="logout()">退出</button>
+    </aside>
+
+    <!-- ===== 中间列表栏 ===== -->
+    <aside class="list-panel">
+      <!-- 广场 -->
+      <div id="panel-square" class="panel">
+        <div class="list-head">
+          <div class="title">话题广场</div>
+          <button class="btn sm" onclick="openNewPost()">＋ 发帖</button>
+        </div>
+        <div id="post-filter" class="filter-bar"></div>
+        <div id="post-list" class="list-body"></div>
+      </div>
+
+      <!-- 房间 -->
+      <div id="panel-rooms" class="panel hidden">
+        <div class="list-head">
+          <div class="title">我的房间</div>
+        </div>
+        <div class="list-search">
+          <input id="join-id-input" placeholder="输入房间号，回车加入" onkeydown="if(event.key==='Enter')joinByInput()">
+        </div>
+        <div class="list-body">
+          <div style="padding:0 4px 8px;display:flex;gap:8px;">
+            <button class="btn sm" style="flex:1" onclick="openCreateRoom()">＋ 创建房间</button>
+            <button class="btn sm ghost" style="flex:1" onclick="openCreateRoom(true)">🔑 加入房间</button>
+          </div>
+          <div id="room-list" style="padding:0 4px 12px;"></div>
+        </div>
+      </div>
+
+      <!-- 私信 -->
+      <div id="panel-dms" class="panel hidden">
+        <div class="list-head">
+          <div class="title">私信</div>
+          <button class="btn sm" onclick="openFindUser()">＋ 找人</button>
+        </div>
+        <div id="dm-list" class="list-body"></div>
+      </div>
+
+      <!-- 我的 -->
+      <div id="panel-me" class="panel hidden">
+        <div class="list-head"><div class="title">我的空间</div></div>
+        <div id="me-list" class="list-body"></div>
+      </div>
+    </aside>
+
+    <!-- ===== 右侧主区 ===== -->
+    <main class="content">
+
+      <!-- 移动端顶栏（返回 + 标题） -->
+      <div class="mobile-top" id="mobile-top">
+        <button class="mobile-back" onclick="mobileBack()">‹</button>
+        <span id="mobile-top-title">私密空间</span>
+      </div>
+
+      <!-- 聊天视图 -->
+      <div id="view-chat" class="view hidden">
+        <div class="chat-header">
+          <button class="mobile-back" onclick="mobileBack()">‹</button>
+          <div style="flex:1;min-width:0;">
+            <div class="room-title" id="room-title">--</div>
+            <div class="room-sub" id="room-sub"></div>
+          </div>
+          <button class="btn sm ghost" id="leave-btn" onclick="leaveRoom()">离开</button>
+        </div>
+        <div id="messages" class="messages"></div>
+        <div id="ai-bar" class="ai-bar hidden">
+          <span>🤖 AI 小助手</span>
+          <button class="btn sm ghost" onclick="openAiReplies()">✨ 智能回复</button>
+        </div>
+        <div id="ai-cands" class="ai-cands hidden"></div>
+        <div class="input-bar">
+          <select id="burn-select" class="burn-select" title="阅后即焚：消息在指定时间后自动销毁">
+            <option value="0">普通</option>
+            <option value="5">🔥 5秒</option>
+            <option value="30">🔥 30秒</option>
+            <option value="60">🔥 60秒</option>
+          </select>
+          <input id="msg-input" type="text" placeholder="输入消息，回车发送..." disabled>
+          <button class="btn" id="send-btn" onclick="sendMessage()" disabled>发送</button>
+        </div>
+      </div>
+
+      <!-- 帖子详情视图 -->
+      <div id="view-post" class="view hidden">
+        <div class="scroll-view"><div id="post-detail"></div></div>
+      </div>
+
+      <!-- 用户主页视图 -->
+      <div id="view-profile" class="view hidden">
+        <div class="scroll-view"><div id="profile-detail"></div></div>
+      </div>
+
+      <!-- 设置视图 -->
+      <div id="view-settings" class="view hidden">
+        <div class="scroll-view"><div id="settings-detail"></div></div>
+      </div>
+
+      <!-- 用户搜索视图 -->
+      <div id="view-finduser" class="view hidden">
+        <div class="scroll-view"><div id="finduser-detail"></div></div>
+      </div>
+
+      <!-- 欢迎视图 -->
+      <div id="view-welcome" class="view">
+        <div class="scroll-view" style="display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;max-width:420px;color:var(--muted);line-height:2;">
+            <img src="logo.svg" alt="私密空间" style="width:76px;height:76px;margin-bottom:16px;">
+            <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;">欢迎来到私密空间</div>
+            <div style="font-size:13px;">
+              在「广场」发现有意思的话题和同好<br>
+              点开感兴趣的人 → 申请私密交流<br>
+              或创建 / 加入专属房间实时畅聊
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== 创建房间弹窗 ===== -->
+  <div id="create-modal" class="modal-mask hidden" onclick="if(event.target===this)closeModal('create-modal')">
+    <div class="modal">
+      <h3 id="create-modal-title">创建房间</h3>
+      <div class="form-group"><label>房间名称</label><input id="create-name" type="text" maxlength="30" placeholder="给你的房间起个名字"></div>
+      <div class="form-group"><label>房间密码（可选，留空则无需密码）</label><input id="create-pass" type="password" placeholder="设置访问密码"></div>
+      <div class="form-group"><label>房间号（加入时填写）</label><input id="join-id" type="text" placeholder="8位房间号" class="hidden"></div>
+      <div class="btn-row">
+        <button class="btn" id="create-confirm" onclick="submitCreateRoom()">确定</button>
+        <button class="btn ghost" onclick="closeModal('create-modal')">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 发帖弹窗 ===== -->
+  <div id="post-modal" class="modal-mask hidden" onclick="if(event.target===this)closeModal('post-modal')">
+    <div class="modal">
+      <h3>发布话题</h3>
+      <div class="form-group"><label>标题（≤60字）</label><input id="post-title" type="text" maxlength="60" placeholder="想聊点什么？"></div>
+      <div class="form-group"><label>内容（≤5000字）</label><textarea id="post-content" maxlength="5000" placeholder="写下你的想法..."></textarea></div>
+      <div class="btn-row">
+        <button class="btn" onclick="submitPost()">发布</button>
+        <button class="btn ghost" onclick="closeModal('post-modal')">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="chat.js"></script>
+</body>
+</html>

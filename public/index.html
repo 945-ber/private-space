@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>私密空间 · 登录</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 欢迎开场动画（同会话只播一次） -->
+  <div class="auth-intro" id="auth-intro">
+    <div class="intro-particles" id="intro-particles"></div>
+    <img src="logo.svg" class="intro-logo" alt="私密空间">
+    <div class="intro-title" id="intro-title"></div>
+    <div class="intro-sub">话题广场 · 专属房间 · 私密交流</div>
+  </div>
+
+  <div class="auth-wrap">
+    <div class="auth-orb auth-orb-1"></div>
+    <div class="auth-orb auth-orb-2"></div>
+    <div class="auth-orb auth-orb-3"></div>
+    <div class="auth-orb auth-orb-4"></div>
+    <div class="auth-card">
+      <div class="auth-logo"><img src="logo.svg" alt="私密空间"></div>
+      <h1>私密空间</h1>
+      <p class="subtitle">话题广场 · 专属房间 · 私密交流</p>
+
+      <!-- 登录 / 注册 切换 -->
+      <div class="tabs">
+        <button id="tab-login" class="active" onclick="switchTab('login')">登录</button>
+        <button id="tab-register" onclick="switchTab('register')">注册</button>
+      </div>
+
+      <!-- 提示信息 -->
+      <div id="msg" class="msg"></div>
+
+      <!-- 登录表单 -->
+      <form id="form-login" onsubmit="return submitLogin(event)">
+        <div class="form-group">
+          <label>用户名</label>
+          <input id="login-user" type="text" autocomplete="username" placeholder="输入用户名" required>
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input id="login-pass" type="password" autocomplete="current-password" placeholder="输入密码" required>
+        </div>
+        <button class="btn" type="submit">登 录</button>
+      </form>
+
+      <!-- 注册表单（默认隐藏） -->
+      <form id="form-register" class="hidden" onsubmit="return submitRegister(event)">
+        <div class="form-group">
+          <label>用户名（2-20位字母/数字/下划线/中文）</label>
+          <input id="reg-user" type="text" autocomplete="username" placeholder="设置用户名" required>
+        </div>
+        <div class="form-group">
+          <label>密码（至少6位）</label>
+          <input id="reg-pass" type="password" autocomplete="new-password" placeholder="设置密码" required>
+        </div>
+        <div class="form-group">
+          <label>确认密码</label>
+          <input id="reg-pass2" type="password" autocomplete="new-password" placeholder="再次输入密码" required>
+        </div>
+        <button class="btn" type="submit">注 册</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 欢迎开场动画：同一会话只播放一次，之后直接进入登录
+    (function () {
+      const intro = document.getElementById('auth-intro');
+      if (!intro) return;
+      const welcomed = sessionStorage.getItem('welcomed');
+      if (welcomed) {
+        intro.style.display = 'none';
+        return;
+      }
+      sessionStorage.setItem('welcomed', '1');
+      // 生成漂浮粒子
+      const wrap = document.getElementById('intro-particles');
+      for (let i = 0; i < 16; i++) {
+        const d = document.createElement('span');
+        d.className = 'pt';
+        d.style.left = Math.random() * 100 + '%';
+        d.style.width = d.style.height = (2 + Math.random() * 5) + 'px';
+        d.style.animationDelay = Math.random() * 4 + 's';
+        d.style.animationDuration = (4 + Math.random() * 6) + 's';
+        wrap.appendChild(d);
+      }
+      // 标题逐字浮现
+      const t = document.getElementById('intro-title');
+      const text = '私密空间';
+      let i = 0;
+      const iv = setInterval(() => {
+        t.textContent = text.slice(0, ++i);
+        if (i >= text.length) clearInterval(iv);
+      }, 190);
+      // 2.5s 后开场层上移淡出，露出登录页
+      setTimeout(() => intro.classList.add('hide'), 2500);
+    })();
+
+    // 切换登录/注册 tab
+    function switchTab(tab) {
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+      document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
+      document.getElementById('form-register').classList.toggle('hidden', tab !== 'register');
+      document.getElementById('msg').textContent = '';
+    }
+
+    function showMsg(text, type) {
+      const el = document.getElementById('msg');
+      el.textContent = text;
+      el.className = 'msg ' + (type || '');
+    }
+
+    async function api(url, data) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data || {})
+      });
+      return res.json();
+    }
+
+    async function submitLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('login-user').value.trim();
+      const password = document.getElementById('login-pass').value;
+      const result = await api('/api/login', { username, password });
+      if (result.ok) {
+        location.href = 'chat.html';
+      } else {
+        showMsg(result.error || '登录失败', 'error');
+      }
+    }
+
+    async function submitRegister(e) {
+      e.preventDefault();
+      const username = document.getElementById('reg-user').value.trim();
+      const password = document.getElementById('reg-pass').value;
+      const password2 = document.getElementById('reg-pass2').value;
+      if (password !== password2) {
+        showMsg('两次输入的密码不一致', 'error');
+        return;
+      }
+      const result = await api('/api/register', { username, password });
+      if (result.ok) {
+        location.href = 'chat.html';
+      } else {
+        showMsg(result.error || '注册失败', 'error');
+      }
+    }
+
+    // 已登录则直接进入聊天室
+    (async function () {
+      const res = await fetch('/api/me', { credentials: 'include' });
+      const data = await res.json();
+      if (data.user) location.href = 'chat.html';
+    })();
+  </script>
+</body>
+</html>

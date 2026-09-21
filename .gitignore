@@ -1,0 +1,16 @@
+# 依赖
+node_modules/
+
+# 日志（运行时自动生成）
+*.log
+
+# 敏感配置：AI API Key 放在这里，绝不入库
+ai.config.json
+
+# 系统杂项
+.DS_Store
+Thumbs.db
+
+# 隧道与运行日志（含 .err/.out 扩展名）
+*.err
+*.out

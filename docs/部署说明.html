@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>私密空间 · 部署说明</title>
+<style>
+  :root {
+    --ink: #1f2933;
+    --ink-2: #4b5563;
+    --ink-3: #6b7280;
+    --line: #e5e7eb;
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --brand: #0f766e;
+    --brand-soft: #e7f5f2;
+    --brand-2: #134e4a;
+    --code-bg: #0f172a;
+    --code-ink: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 15.5px;
+  }
+  header {
+    background: linear-gradient(135deg, #0f766e, #134e4a);
+    color: #fff;
+    padding: 46px 20px 38px;
+    text-align: center;
+  }
+  header h1 { font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+  header p { margin-top: 8px; font-size: 14px; opacity: 0.88; }
+  main { max-width: 800px; margin: 0 auto; padding: 28px 18px 64px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 24px 10px;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brand-2);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--brand-soft);
+  }
+  h2 .no { color: var(--brand); margin-right: 6px; }
+  h3 { font-size: 15.5px; font-weight: 600; margin: 16px 0 6px; color: var(--ink); }
+  p { margin: 8px 0; }
+  ul, ol { margin: 8px 0 8px 22px; }
+  li { margin: 5px 0; }
+  strong { color: var(--brand-2); }
+  code {
+    background: var(--brand-soft);
+    color: var(--brand-2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 13.5px;
+    font-family: Consolas, "Courier New", monospace;
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--brand-soft); color: var(--brand-2); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .tip {
+    background: #fff8e6;
+    border-left: 4px solid #f5b301;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    margin: 12px 0;
+  }
+  .warn {
+    background: #fdf1f0;
+    border-left: 4px solid #dc2626;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    margin: 12px 0;
+  }
+  footer {
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 13px;
+    padding: 8px 0 40px;
+  }
+  @media (max-width: 600px) {
+    header h1 { font-size: 21px; }
+    main { padding: 16px 12px 48px; }
+    .card { padding: 18px 16px 6px; }
+    table { font-size: 13px; }
+    th, td { padding: 7px 9px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>私密空间 · 部署说明</h1>
+  <p>从装环境到公网可访问，按顺序操作，每一步都能自己确认有没有做对</p>
+</header>
+
+<main>
+
+  <div class="card">
+    <h2><span class="no">01</span>技术栈</h2>
+    <table>
+      <tr><th>层</th><th>技术</th><th>作用</th></tr>
+      <tr><td>后端</td><td>Node.js + Express</td><td>处理登录、发帖、房间、资料等 HTTP 请求</td></tr>
+      <tr><td>实时通信</td><td>Socket.IO</td><td>房间 / 私信消息实时收发</td></tr>
+      <tr><td>数据库</td><td>MongoDB</td><td>存用户、帖子、房间、消息（阅后即焚靠数据库自动清理）</td></tr>
+      <tr><td>会话</td><td>express-session</td><td>登录状态保持</td></tr>
+      <tr><td>密码</td><td>bcryptjs</td><td>密码哈希加密</td></tr>
+      <tr><td>AI 能力</td><td>火山方舟（豆包）API</td><td>帖子打标 + 聊天回复建议（可选，不配也能用）</td></tr>
+      <tr><td>前端</td><td>原生 HTML / CSS / JS</td><td>无需构建，浏览器直接打开</td></tr>
+    </table>
+    <p>请求链路大致是：<code>浏览器 → 公网隧道 → Node.js（3000 端口）→ MongoDB（27017）/ AI 接口</code>。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">02</span>环境要求</h2>
+    <table>
+      <tr><th>软件</th><th>版本</th><th>说明</th></tr>
+      <tr><td>Node.js</td><td>≥ 18</td><td>代码用到了内置 fetch、AbortController</td></tr>
+      <tr><td>MongoDB</td><td>≥ 5.0（推荐 6 / 7）</td><td>用官方 Community Server 版</td></tr>
+      <tr><td>系统</td><td>Windows 10 / 11</td><td>本文按 Windows 写，Linux / macOS 差异见文末</td></tr>
+      <tr><td>浏览器</td><td>任意现代浏览器</td><td>手机、电脑都能开</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">03</span>安装 Node.js</h2>
+    <ol>
+      <li>打开 <code>https://nodejs.org/zh-cn</code>，下载 LTS（长期支持版）安装包；</li>
+      <li>双击安装，一路默认选项即可（安装路径可改，记住就行）；</li>
+      <li>按 <code>Win + R</code> 输入 <code>cmd</code> 回车，在命令行里输入：</li>
+    </ol>
+    <pre><code>node -v
+npm -v</code></pre>
+    <p>能打印出版本号（如 <code>v20.x.x</code> 和 <code>10.x.x</code>）就说明装好了。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">04</span>安装 MongoDB</h2>
+    <ol>
+      <li>打开 <code>https://www.mongodb.com/try/download/community</code>，Version 选最新稳定版，Platform 选 Windows，Package 选 msi；</li>
+      <li>双击安装：同意协议 → 选 Custom；安装路径建议改成 <code>C:\mongodb</code>（后面的脚本默认找这个路径）；</li>
+      <li>安装向导里如果有「Install MongoDB Compass」的勾选项，可以去掉（那是图形界面工具，不是必需的）；</li>
+      <li>装完一般会自动注册成 Windows 服务并开机自启，这一步依赖它；</li>
+      <li>打开 <code>C:\mongodb</code>，新建一个空文件夹，命名为 <code>data_new</code>；</li>
+      <li>验证：命令行里输入 <code>mongod --version</code>，能打印版本号即成功。</li>
+    </ol>
+    <div class="tip"><b>如果没自动注册成服务：</b>可以手动启动，命令行运行 <code>"C:\mongodb\bin\mongod.exe" --dbpath "C:\mongodb\data_new" --port 27017</code>。这个窗口不能关，关了数据库就停了。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">05</span>获取代码</h2>
+    <p>你会拿到一个项目源码压缩包。解压到任意目录，例如 <code>D:\private-chat</code>。解压后目录里应有这些关键文件：</p>
+    <pre><code>private-chat/
+├── server.js          # 后端服务器（入口）
+├── ai.js              # AI 版主 + 智能回复
+├── ai.config.json     # AI 接口配置（API Key 填这里）
+├── package.json       # 依赖清单
+├── seed-posts.js      # 初始化脚本（建管理员 + 预置帖子）
+├── start-chat.ps1     # Windows 一键启动脚本（可选）
+├── public/            # 前端页面
+│   ├── index.html     # 登录 / 注册页
+│   ├── chat.html      # 主界面（广场 / 房间 / 私信 / 我的）
+│   ├── chat.js        # 前端逻辑
+│   ├── style.css      # 全部样式
+│   └── logo.svg       # 专属 LOGO
+└── docs/              # 文档（本说明 + 产品使用说明）</code></pre>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">06</span>安装依赖</h2>
+    <p>命令行进入项目目录：</p>
+    <pre><code>cd D:\private-chat
+npm install</code></pre>
+    <p>看到 <code>added xxx packages</code> 即成功。国内网络慢的话，先执行 <code>npm config set registry https://registry.npmmirror.com</code> 换镜像再装。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">07</span>配置 AI（可选）</h2>
+    <p>AI 功能（帖子自动打标签、聊天回复建议）依赖一个豆包 / 火山方舟的 API Key。暂时没有就跳过这步——网站其他功能都正常，只是帖子标签显示「待分类」、聊天里没有 AI 回复按钮。</p>
+    <p>打开 <code>ai.config.json</code>，改成：</p>
+    <pre><code>{
+  "apiKey": "ark-你的_API_Key",
+  "model": "doubao-seed-2-1-turbo-260628"
+}</code></pre>
+    <p>Key 的获取：去 <code>https://console.volcengine.com/ark</code> 注册火山引擎账号，创建 API Key（形如 <code>ark-xxxx-...</code>）。模型名可以在这个文件里改，方舟平台上开通的豆包 / Seed 模型都行。</p>
+    <div class="warn"><b>注意：</b>如果配置文件里留着一个别人分享给你的真实 Key，务必换成你自己的，或删掉。这个 Key 等于你账户的钥匙，别提交到 Git 仓库，也别发给别人。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">08</span>初始化数据（可选但推荐）</h2>
+    <p>首次运行前跑一次，会预置一个管理员账号和几条优质话题，让广场不至于空着：</p>
+    <pre><code>node seed-posts.js</code></pre>
+    <p>看到下面的提示就成功了：</p>
+    <pre><code>✅ 管理员账号已创建: admin / admin123
+🌱 已预置 6 条优质话题（作者: admin）</code></pre>
+    <div class="warn"><b>注意：</b>这个脚本会清空广场现有帖子再写入种子数据，只在首次部署时跑一次，别重复运行。管理员初始密码是 <code>admin123</code>，上线后务必登录 admin 改成自己的密码。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">09</span>启动服务器</h2>
+    <pre><code>npm start</code></pre>
+    <p>看到这两行说明启动成功：</p>
+    <pre><code>✅ MongoDB 连接成功
+服务已启动: http://localhost:3000</code></pre>
+    <p>浏览器打开 <code>http://localhost:3000</code>，出现登录页即可。</p>
+    <p>这个命令行窗口要保持开着，服务器就在运行；关掉窗口服务就停了。Windows 下想后台运行，可以用 <code>start-chat.ps1</code> 一键脚本（见第 11 节）。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">10</span>部署到公网</h2>
+    <p>本机的 <code>localhost:3000</code> 只有你自己能开。想让任何人通过链接访问，需要一条「公网隧道」。提供两种方式，推荐方式 B。</p>
+
+    <h3>方式 A：cloudflared（脚本内置，可先试）</h3>
+    <p>项目 <code>tools/</code> 目录里带了 <code>cloudflared.exe</code>（Windows）。命令行执行：</p>
+    <pre><code>tools\cloudflared.exe tunnel --url http://localhost:3000</code></pre>
+    <p>等几秒会打印一个 <code>https://xxxx.trycloudflare.com</code> 地址，发出去即可。免费版 cloudflared 隧道不太稳定，如果一直断，用方式 B。</p>
+
+    <h3>方式 B：localhost.run（SSH 隧道，推荐）</h3>
+    <p>只要有 <code>ssh</code> 命令（Windows 10+ 自带，装 Git 也会带）。命令行执行：</p>
+    <pre><code>ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=45 -o ServerAliveCountMax=3 -R 80:localhost:3000 nokey@localhost.run</code></pre>
+    <p>几秒后打印：</p>
+    <pre><code>https://af9baf2f813a89.lhr.life tunneled with tls termination</code></pre>
+    <p>那个 <code>https://xxx.lhr.life</code> 就是你的公网地址。复制发给任何人，手机 / 电脑都能打开。验证公网：用手机（或浏览器无痕窗口）打开这个地址，能出现登录页即成功。</p>
+    <div class="tip"><b>免费隧道的限制：</b>地址每 5~6 小时失效一次，失效后重新执行命令会得到新地址（旧地址作废）。隧道窗口必须保持运行，关掉就断。想要长期固定域名，用 localhost.run 的付费自定义域名，或买台云服务器配 Nginx。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">11</span>Windows 一键启动脚本（可选）</h2>
+    <p>项目里的 <code>start-chat.ps1</code> 会自动完成：启动 MongoDB → 启动服务器 → 启动隧道 → 打印地址。</p>
+    <pre><code>.\start-chat.ps1</code></pre>
+    <p>这个脚本默认用 cloudflared 隧道；如果 cloudflared 不稳，改用第 10 节方式 B 的 ssh 命令手动开隧道。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">12</span>常见问题</h2>
+    <table>
+      <tr><th>现象</th><th>原因与处理</th></tr>
+      <tr><td>启动报 <code>ECONNREFUSED 27017</code></td><td>MongoDB 没启动，按第 04 节确认 mongod 在运行</td></tr>
+      <tr><td><code>EADDRINUSE</code> / 3000 端口被占用</td><td>上一个 node 没关，命令行 <code>netstat -ano | findstr :3000</code> 找 PID，<code>taskkill /PID &lt;PID&gt; /F</code> 杀掉再启动</td></tr>
+      <tr><td>登录后 500「服务器内部错误」</td><td>大概率是旧版本 bug，确认用的是最新版代码（v9+）</td></tr>
+      <tr><td>帖子标签一直是「待分类」</td><td>AI 未配置或 Key 无效，检查第 07 节的 <code>ai.config.json</code></td></tr>
+      <tr><td>手机上主题 / 背景切换报错</td><td>确认服务器是最新版代码并已重启</td></tr>
+      <tr><td>中文乱码</td><td>用 UTF-8 编码保存文件；命令行里先执行 <code>chcp 65001</code></td></tr>
+      <tr><td>别人打不开公网地址</td><td>隧道失效，重新执行第 10 节方式 B 拿新地址</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">13</span>上线前的安全提醒</h2>
+    <ol>
+      <li>管理员账号 <code>admin / admin123</code> 上线后立即在「我的 → 修改密码」里改掉；</li>
+      <li><code>ai.config.json</code> 里的 Key 不要提交到 Git，不要发给别人；</li>
+      <li>数据都存在你的 MongoDB 里，如果担心丢失，给数据库做备份；</li>
+      <li>连上公网的服务就暴露给全网了，演示别传真实敏感资料；正式运营建议套一层 HTTPS + 鉴权（当前隧道已自带 TLS）。</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">14</span>数据说明</h2>
+    <table>
+      <tr><th>数据库集合</th><th>内容</th></tr>
+      <tr><td><code>users</code></td><td>用户账号（含头像 / 简介 / 主题 / 背景 / 标签）</td></tr>
+      <tr><td><code>rooms</code></td><td>群房间与一对一私信会话</td></tr>
+      <tr><td><code>messages</code></td><td>聊天消息（阅后即焚的带 TTL 到期自动删除）</td></tr>
+      <tr><td><code>posts</code></td><td>广场帖子（含评论、AI 标签与质量分）</td></tr>
+      <tr><td><code>dm_invites</code></td><td>私信申请（待处理 / 已接受 / 已拒绝）</td></tr>
+    </table>
+    <p>数据默认存在 MongoDB 的数据目录（本说明中为 <code>C:\mongodb\data_new</code>）。</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="no">15</span>Linux / macOS 差异</h2>
+    <ul>
+      <li><strong>Node.js</strong>：用 <code>nvm</code> 安装，或去官网下载对应系统安装包；</li>
+      <li><strong>MongoDB</strong>：用包管理器安装（Ubuntu 例：<code>sudo apt install mongodb-org</code>），启动 <code>sudo systemctl start mongod</code>；</li>
+      <li><strong>启动</strong>：同样是 <code>npm start</code>；</li>
+      <li><strong>一键脚本</strong>：<code>start-chat.ps1</code> 是 Windows 专用，Linux / macOS 直接用 <code>npm start</code> + 第 10 节的隧道命令。</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer>私密空间 · 部署说明</footer>
+
+</body>
+</html>
