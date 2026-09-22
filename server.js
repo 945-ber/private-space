@@ -34,6 +34,11 @@ const THEMES = ['ocean', 'dark', 'sunset', 'nebula'];
 // 管理员账户：可删除广场任意帖子（含他人）
 const ADMIN_USER = 'admin';
 
+// 转义正则特殊字符：防止用户输入被当作正则元字符执行（如 .* 会匹配全部用户）
+function escapeRegExp(s) {
+  return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
@@ -172,7 +177,10 @@ app.post('/api/register', async (req, res) => {
 // 登录
 app.post('/api/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = req.body || {};
+    if (typeof username !== 'string' || typeof password !== 'string' || !username || !password) {
+      return res.status(400).json({ error: '请输入用户名和密码' });
+    }
     const user = await usersCol().findOne({ username });
     if (!user) return res.status(401).json({ error: '用户名或密码错误' });
     const ok = await bcrypt.compare(password || '', user.passwordHash);
@@ -286,9 +294,10 @@ app.post('/api/me/profile', requireLogin, async (req, res) => {
 
 // 搜索用户（供发私信找人）
 app.get('/api/users/search', requireLogin, async (req, res) => {
-  const q = (req.query.q || '').trim();
+  const rawQ = req.query.q;
+  const q = (typeof rawQ === 'string' ? rawQ : '').trim();
   let filter = {};
-  if (q) filter = { username: { $regex: q, $options: 'i' } };
+  if (q) filter = { username: { $regex: escapeRegExp(q), $options: 'i' } };
   const list = await usersCol().find(filter).limit(20).toArray();
   res.json({
     users: list.map((u) => ({
