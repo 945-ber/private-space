@@ -1,5 +1,5 @@
 /* ============================================================
-   私密空间 · 统一样式 v5
+   树洞 · 统一样式 v5
    四套主题 + 三栏布局（桌面）/ 底部Tab + 全屏切换（移动端）
    包含：LOGO、AI 版主、智能回复、移动端响应式、质感升级
    ============================================================ */
@@ -1356,4 +1356,49 @@ body {
   .msg-row { max-width: 90%; }
   .burn-select { max-width: 62px; padding: 9px 4px; font-size: 12px; }
   .input-bar .btn { padding: 12px 14px; }
+}
+
+/* ===== 树洞 v10：多语言切换 + 系统面板 ===== */
+.lang-switch {
+  position: fixed; top: 14px; right: 14px; z-index: 99;
+  display: flex; gap: 6px;
+}
+.lang-switch button {
+  border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.12);
+  color: #fff; font-size: 12px; padding: 5px 10px; border-radius: 999px;
+  cursor: pointer; backdrop-filter: blur(6px); transition: all .2s;
+}
+.lang-switch button:hover { background: rgba(255,255,255,0.28); }
+
+.sys-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px; margin-bottom: 12px;
+}
+.sys-card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+.lang-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.lang-btn {
+  flex: 1 1 calc(50% - 8px); min-width: 0; padding: 10px 0;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--card); color: var(--text); font-size: 14px; cursor: pointer;
+  transition: all .2s;
+}
+.lang-btn:hover { border-color: var(--accent, #0ea5e9); }
+.lang-btn.active {
+  background: linear-gradient(135deg, #0ea5e9, #22d3ee); color: #fff;
+  border-color: transparent; box-shadow: 0 4px 12px rgba(14,165,233,0.35);
+}
+.changelog { display: flex; flex-direction: column; gap: 6px; }
+.cl-item {
+  display: flex; gap: 10px; align-items: baseline;
+  padding: 7px 10px; border-radius: 8px; background: rgba(128,128,128,0.06);
+}
+.cl-ver {
+  flex-shrink: 0; font-size: 12px; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+  padding: 2px 8px; border-radius: 999px;
+}
+.cl-txt { font-size: 13px; color: var(--text); line-height: 1.5; }
+@media (max-width: 768px) {
+  .lang-switch { top: 10px; right: 10px; }
+  .lang-switch button { padding: 4px 8px; font-size: 11px; }
 }

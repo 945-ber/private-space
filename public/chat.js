@@ -1,5 +1,5 @@
 /**
- * 私密空间 —— 前端逻辑
+ * 树洞 —— 前端逻辑
  * 覆盖：话题广场 / 群房间 / 私信申请 / 用户主页 / 个性化设置 / 阅后即焚 / 主题切换
  */
 
@@ -18,6 +18,117 @@ let allPosts = [];        // 广场帖子缓存（供标签筛选）
 let postFilter = 'all';   // 广场筛选：all / 深度分析 / 经验分享 / 求助 / 情绪宣泄 / high
 
 const $ = (id) => document.getElementById(id);
+
+// ========== 国际化（多语言） ==========
+const LANGS = ['zh', 'en', 'fr', 'de'];
+const I18N = {
+  zh: {
+    appName:'树洞', 'nav.square':'广场', 'nav.rooms':'房间', 'nav.dms':'私信', 'nav.me':'我的', 'nav.system':'系统', 'nav.logout':'退出', 'nav.settings':'设置',
+    'panel.square':'话题广场', 'panel.rooms':'我的房间', 'panel.dms':'私信', 'panel.me':'我的空间', 'panel.system':'系统设置',
+    'btn.newPost':'＋ 发帖', 'btn.createRoom':'＋ 创建房间', 'btn.joinRoom':'🔑 加入房间', 'btn.findUser':'＋ 找人', 'btn.leave':'离开', 'btn.send':'发送', 'btn.confirm':'确定', 'btn.cancel':'取消', 'btn.publish':'发布',
+    'ph.joinId':'输入房间号，回车加入', 'ph.roomName':'给你的房间起个名字', 'ph.roomPass':'设置访问密码', 'ph.roomId':'8位房间号', 'ph.message':'输入消息，回车发送...', 'ph.postTitle':'想聊点什么？', 'ph.postContent':'写下你的想法...',
+    'modal.createTitle':'创建房间', 'modal.roomName':'房间名称', 'modal.roomPass':'房间密码（可选，留空则无需密码）', 'modal.roomId':'房间号（加入时填写）', 'modal.postTitle':'发布话题', 'modal.postTitleLabel':'标题（≤60字）', 'modal.postContentLabel':'内容（≤5000字）',
+    'ai.helper':'🤖 AI 小助手', 'ai.smartReply':'✨ 智能回复', 'burn.normal':'普通', 'burn.sec':'秒',
+    'welcome.title':'欢迎来到树洞', 'welcome.l1':'在「广场」发现有意思的话题和同好', 'welcome.l2':'点开感兴趣的人 → 申请私密交流', 'welcome.l3':'或创建 / 加入专属房间实时畅聊',
+    'sys.lang':'语言 / Language', 'sys.changelog':'更新说明',
+    'me.profile':'个人资料', 'me.profileSub':'头像 · 简介 · 兴趣标签', 'me.theme':'主题皮肤', 'me.themeSub':'四套配色自由切换', 'me.chatBg':'聊天背景', 'me.chatBgSub':'渐变或自定义图片', 'me.password':'修改密码', 'me.passwordSub':'定期更换更安全', 'me.descPlaceholder':'点击编辑头像与简介，让别人更想认识你', 'me.adminBadge':'管理员',
+    'set.profile':'个人资料', 'set.theme':'主题皮肤', 'set.background':'聊天背景', 'set.password':'修改密码',
+    'theme.ocean':'海洋青绿', 'theme.dark':'午夜暗黑', 'theme.sunset':'日落暖橙', 'theme.nebula':'星空幻紫',
+    'filter.all':'全部', 'filter.deep':'🧠 深度', 'filter.exp':'📚 经验', 'filter.help':'🆘 求助', 'filter.emo':'💭 情绪', 'filter.high':'⭐ 高质量',
+    'room.dmSession':'私密会话', 'room.info':'房间号 {id} · {n} 人',
+    'toast.fast':'操作太快啦，稍等片刻再切换～', 'toast.tooFast':'操作太快啦，稍等片刻～', 'toast.langOk':'已切换语言'
+  },
+  en: {
+    appName:'Tree Hole', 'nav.square':'Square', 'nav.rooms':'Rooms', 'nav.dms':'Messages', 'nav.me':'Me', 'nav.system':'System', 'nav.logout':'Log out', 'nav.settings':'Settings',
+    'panel.square':'Topics', 'panel.rooms':'My Rooms', 'panel.dms':'Messages', 'panel.me':'My Space', 'panel.system':'System',
+    'btn.newPost':'＋ New post', 'btn.createRoom':'＋ Create room', 'btn.joinRoom':'🔑 Join room', 'btn.findUser':'＋ Find', 'btn.leave':'Leave', 'btn.send':'Send', 'btn.confirm':'Confirm', 'btn.cancel':'Cancel', 'btn.publish':'Publish',
+    'ph.joinId':'Enter room id, press Enter to join', 'ph.roomName':'Name your room', 'ph.roomPass':'Set a password', 'ph.roomId':'8-digit room id', 'ph.message':'Type a message, Enter to send...', 'ph.postTitle':'What do you want to talk about?', 'ph.postContent':'Write your thoughts...',
+    'modal.createTitle':'Create Room', 'modal.roomName':'Room name', 'modal.roomPass':'Password (optional)', 'modal.roomId':'Room id (for joining)', 'modal.postTitle':'New Topic', 'modal.postTitleLabel':'Title (≤60 chars)', 'modal.postContentLabel':'Content (≤5000 chars)',
+    'ai.helper':'🤖 AI Assistant', 'ai.smartReply':'✨ Smart reply', 'burn.normal':'Normal', 'burn.sec':'s',
+    'welcome.title':'Welcome to Tree Hole', 'welcome.l1':'Find interesting topics in the Square', 'welcome.l2':'Open someone\u2019s profile → request a private chat', 'welcome.l3':'Or create / join a private room to chat live',
+    'sys.lang':'Language', 'sys.changelog':'Changelog',
+    'me.profile':'Profile', 'me.profileSub':'Avatar · Bio · Interests', 'me.theme':'Theme', 'me.themeSub':'4 color themes', 'me.chatBg':'Chat background', 'me.chatBgSub':'Gradient or image', 'me.password':'Change password', 'me.passwordSub':'Stay secure', 'me.descPlaceholder':'Click to edit avatar and bio', 'me.adminBadge':'Admin',
+    'set.profile':'Profile', 'set.theme':'Theme', 'set.background':'Chat background', 'set.password':'Change password',
+    'theme.ocean':'Ocean', 'theme.dark':'Midnight', 'theme.sunset':'Sunset', 'theme.nebula':'Nebula',
+    'filter.all':'All', 'filter.deep':'🧠 Deep', 'filter.exp':'📚 Experience', 'filter.help':'🆘 Help', 'filter.emo':'💭 Emotion', 'filter.high':'⭐ Top',
+    'room.dmSession':'Private chat', 'room.info':'Room {id} · {n} people',
+    'toast.fast':'Too fast, take a breath～', 'toast.tooFast':'Too fast, take a breath～', 'toast.langOk':'Language switched'
+  },
+  fr: {
+    appName:'Trou d\u2019arbre', 'nav.square':'Place', 'nav.rooms':'Chambres', 'nav.dms':'Messages', 'nav.me':'Profil', 'nav.system':'Syst\u00e8me', 'nav.logout':'D\u00e9connexion', 'nav.settings':'R\u00e9glages',
+    'panel.square':'Sujets', 'panel.rooms':'Mes chambres', 'panel.dms':'Messages', 'panel.me':'Mon espace', 'panel.system':'Syst\u00e8me',
+    'btn.newPost':'＋ Nouveau sujet', 'btn.createRoom':'＋ Cr\u00e9er une chambre', 'btn.joinRoom':'🔑 Rejoindre', 'btn.findUser':'＋ Chercher', 'btn.leave':'Quitter', 'btn.send':'Envoyer', 'btn.confirm':'Confirmer', 'btn.cancel':'Annuler', 'btn.publish':'Publier',
+    'ph.joinId':'Entrer un n\u00b0 de chambre', 'ph.roomName':'Nommez votre chambre', 'ph.roomPass':'D\u00e9finir un mot de passe', 'ph.roomId':'N\u00b0 \u00e0 8 chiffres', 'ph.message':'Saisir un message, Entr\u00e9e pour envoyer...', 'ph.postTitle':'De quoi parler ?', 'ph.postContent':'\u00c9crivez vos pens\u00e9es...',
+    'modal.createTitle':'Cr\u00e9er une chambre', 'modal.roomName':'Nom de la chambre', 'modal.roomPass':'Mot de passe (optionnel)', 'modal.roomId':'N\u00b0 de chambre', 'modal.postTitle':'Nouveau sujet', 'modal.postTitleLabel':'Titre (\u226460 car.)', 'modal.postContentLabel':'Contenu (\u22645000 car.)',
+    'ai.helper':'🤖 Assistant IA', 'ai.smartReply':'✨ R\u00e9ponse maligne', 'burn.normal':'Normal', 'burn.sec':'s',
+    'welcome.title':'Bienvenue dans le Trou d\u2019arbre', 'welcome.l1':'D\u00e9couvrez des sujets int\u00e9ressants', 'welcome.l2':'Ouvrez un profil → demandez un chat priv\u00e9', 'welcome.l3':'Ou cr\u00e9ez / rejoignez une chambre priv\u00e9e',
+    'sys.lang':'Langue', 'sys.changelog':'Journal des versions',
+    'me.profile':'Profil', 'me.profileSub':'Avatar · Bio · Centres d\u2019int\u00e9r\u00eat', 'me.theme':'Th\u00e8me', 'me.themeSub':'4 couleurs', 'me.chatBg':'Arri\u00e8re-plan', 'me.chatBgSub':'D\u00e9grad\u00e9 ou image', 'me.password':'Changer le mot de passe', 'me.passwordSub':'Restez s\u00e9curis\u00e9', 'me.descPlaceholder':'Cliquez pour modifier', 'me.adminBadge':'Admin',
+    'set.profile':'Profil', 'set.theme':'Th\u00e8me', 'set.background':'Arri\u00e8re-plan', 'set.password':'Mot de passe',
+    'theme.ocean':'Oc\u00e9an', 'theme.dark':'Minuit', 'theme.sunset':'Coucher de soleil', 'theme.nebula':'N\u00e9buleuse',
+    'filter.all':'Tous', 'filter.deep':'🧠 Profond', 'filter.exp':'📚 Exp\u00e9rience', 'filter.help':'🆘 Aide', 'filter.emo':'💭 \u00c9motion', 'filter.high':'⭐ Top',
+    'room.dmSession':'Conversation priv\u00e9e', 'room.info':'Chambre {id} · {n} pers.',
+    'toast.fast':'Trop rapide, respirez～', 'toast.tooFast':'Trop rapide, respirez～', 'toast.langOk':'Langue chang\u00e9e'
+  },
+  de: {
+    appName:'Baumloch', 'nav.square':'Platz', 'nav.rooms':'R\u00e4ume', 'nav.dms':'Nachrichten', 'nav.me':'Ich', 'nav.system':'System', 'nav.logout':'Abmelden', 'nav.settings':'Einstellungen',
+    'panel.square':'Themen', 'panel.rooms':'Meine R\u00e4ume', 'panel.dms':'Nachrichten', 'panel.me':'Mein Bereich', 'panel.system':'System',
+    'btn.newPost':'＋ Neuer Beitrag', 'btn.createRoom':'＋ Raum erstellen', 'btn.joinRoom':'🔑 Beitreten', 'btn.findUser':'＋ Suchen', 'btn.leave':'Verlassen', 'btn.send':'Senden', 'btn.confirm':'Best\u00e4tigen', 'btn.cancel':'Abbrechen', 'btn.publish':'Ver\u00f6ffentlichen',
+    'ph.joinId':'Raumnummer eingeben, Enter zum Beitreten', 'ph.roomName':'Name deinen Raum', 'ph.roomPass':'Passwort festlegen', 'ph.roomId':'8-stellige Raumnummer', 'ph.message':'Nachricht eingeben, Enter zum Senden...', 'ph.postTitle':'Wor\u00fcber m\u00f6chtest du reden?', 'ph.postContent':'Schreibe deine Gedanken...',
+    'modal.createTitle':'Raum erstellen', 'modal.roomName':'Raumname', 'modal.roomPass':'Passwort (optional)', 'modal.roomId':'Raumnummer', 'modal.postTitle':'Neues Thema', 'modal.postTitleLabel':'Titel (\u226460 Zeichen)', 'modal.postContentLabel':'Inhalt (\u22645000 Zeichen)',
+    'ai.helper':'🤖 KI-Assistent', 'ai.smartReply':'✨ Intelligente Antwort', 'burn.normal':'Normal', 'burn.sec':'s',
+    'welcome.title':'Willkommen im Baumloch', 'welcome.l1':'Finde interessante Themen auf dem Platz', 'welcome.l2':'\u00d6ffne ein Profil → bitte um privaten Chat', 'welcome.l3':'Oder erstelle / tritt einem privaten Raum bei',
+    'sys.lang':'Sprache', 'sys.changelog':'Versionsprotokoll',
+    'me.profile':'Profil', 'me.profileSub':'Avatar · Bio · Interessen', 'me.theme':'Design', 'me.themeSub':'4 Farbthemen', 'me.chatBg':'Chat-Hintergrund', 'me.chatBgSub':'Verlauf oder Bild', 'me.password':'Passwort \u00e4ndern', 'me.passwordSub':'Bleib sicher', 'me.descPlaceholder':'Klicken zum Bearbeiten', 'me.adminBadge':'Admin',
+    'set.profile':'Profil', 'set.theme':'Design', 'set.background':'Chat-Hintergrund', 'set.password':'Passwort \u00e4ndern',
+    'theme.ocean':'Ozean', 'theme.dark':'Mitternacht', 'theme.sunset':'Sonnenuntergang', 'theme.nebula':'Nebel',
+    'filter.all':'Alle', 'filter.deep':'🧠 Tief', 'filter.exp':'📚 Erfahrung', 'filter.help':'🆘 Hilfe', 'filter.emo':'💭 Emotion', 'filter.high':'⭐ Top',
+    'room.dmSession':'Privater Chat', 'room.info':'Raum {id} · {n} Personen',
+    'toast.fast':'Zu schnell, atme durch～', 'toast.tooFast':'Zu schnell, atme durch～', 'toast.langOk':'Sprache gewechselt'
+  }
+};
+let lang = localStorage.getItem('sd_lang') || 'zh';
+function t(key) { return (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key; }
+function applyLang() {
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.getAttribute('data-i18n-ph')); });
+  document.documentElement.lang = lang;
+  if (currentNav === 'me') renderMe();
+  if (currentNav === 'square') renderPostFilter();
+  const sub = $('room-sub');
+  if (sub && currentRoom) renderRoomSub();
+}
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('sd_lang', l);
+  applyLang();
+  document.querySelectorAll('.lang-btn').forEach((b) => b.classList.toggle('active', b.dataset.lang === l));
+  toast(t('toast.langOk'));
+}
+// 版本更迭说明（简洁版）
+const CHANGELOG = [
+  ['v1', '基础上线：账号注册登录、私密房间实时聊天、私信'],
+  ['v2', '话题广场：发帖、回帖、点赞讨论'],
+  ['v3', '个性化：主题皮肤、自定义头像、聊天背景'],
+  ['v4', 'AI 版主：帖子自动打标、智能回复建议'],
+  ['v5', '移动端适配 + 专属 LOGO'],
+  ['v6', '登录动画、个人主页重构、管理员账号'],
+  ['v7', '欢迎动画、页面转场、「我的」页升级'],
+  ['v8', '修复房间创建与退出、移动端适配、性能优化'],
+  ['v9', '修复主题与聊天背景、自定义主页封面、防连点'],
+  ['v10', '更名「树洞」、新增系统设置（多语言）、安全加固']
+];
+function renderSystem() {
+  const el = $('changelog');
+  el.innerHTML = CHANGELOG.map(([v, txt]) => `<div class="cl-item"><span class="cl-ver">${v}</span><span class="cl-txt">${txt}</span></div>`).join('');
+  document.querySelectorAll('.lang-btn').forEach((b) => b.classList.toggle('active', b.dataset.lang === lang));
+}
+function renderRoomSub() {
+  if (!currentRoom) return;
+  $('room-sub').textContent = currentRoom.type === 'dm'
+    ? t('room.dmSession')
+    : t('room.info').replace('{id}', currentRoom.id).replace('{n}', currentRoom.members ? currentRoom.members.length : '?');
+}
 
 // ========== 工具函数 ==========
 function escapeHtml(str) {
@@ -133,6 +244,7 @@ function mobileBack() {
   ensureSocket();
   loadDmBadge();
   checkAi();
+  applyLang();
   switchNav('square');
 })();
 
@@ -169,7 +281,8 @@ function ensureSocket() {
 
   socket.on('members_update', (info) => {
     if (currentRoom) {
-      $('room-sub').textContent = currentRoom.type === 'dm' ? '私密会话' : `房间号 ${currentRoom.id} · ${info.members.length} 人`;
+      currentRoom.members = info.members;
+      renderRoomSub();
     }
   });
 
@@ -214,7 +327,7 @@ let navCooldownUntil = 0;
 function switchNav(view) {
   const now = Date.now();
   if (now < navCooldownUntil) {
-    toast('操作太快啦，稍等片刻再切换～');
+    toast(t('toast.fast'));
     return;
   }
   navCooldownUntil = now + 300;
@@ -225,7 +338,7 @@ function switchNav(view) {
   document.querySelectorAll('.nav-item').forEach((el) => {
     el.classList.toggle('active', el.dataset.view === view);
   });
-  ['square', 'rooms', 'dms', 'me'].forEach((v) => {
+  ['square', 'rooms', 'dms', 'me', 'system'].forEach((v) => {
     $('panel-' + v).classList.toggle('hidden', v !== view);
   });
   // 面板切换动画
@@ -237,6 +350,7 @@ function switchNav(view) {
   else if (view === 'rooms') loadRooms();
   else if (view === 'dms') { loadDms(); loadDmBadge(); }
   else if (view === 'me') renderMe();
+  else if (view === 'system') renderSystem();
 }
 
 // ========== 话题广场 ==========
@@ -251,12 +365,12 @@ async function loadPosts() {
 // 筛选条（AI 版主标签）
 function renderPostFilter() {
   const chips = [
-    ['all', '全部'],
-    ['深度分析', '🧠 深度'],
-    ['经验分享', '📚 经验'],
-    ['求助', '🆘 求助'],
-    ['情绪宣泄', '💭 情绪'],
-    ['high', '⭐ 高质量']
+    ['all', t('filter.all')],
+    ['深度分析', t('filter.deep')],
+    ['经验分享', t('filter.exp')],
+    ['求助', t('filter.help')],
+    ['情绪宣泄', t('filter.emo')],
+    ['high', t('filter.high')]
   ];
   $('post-filter').innerHTML = chips.map(([v, label]) =>
     `<span class="filter-chip ${postFilter === v ? 'active' : ''}" onclick="setPostFilter('${v}')">${label}</span>`
@@ -580,7 +694,7 @@ function enterRoom(room) {
   showView('view-chat', 'view-pop');
   showContent('', true); // 移动端：全屏聊天，用 chat-header 返回
   $('room-title').textContent = room.name;
-  $('room-sub').textContent = room.type === 'dm' ? '私密会话' : `房间号 ${room.id} · ${room.members.length} 人`;
+  renderRoomSub();
   $('msg-input').disabled = false;
   $('send-btn').disabled = false;
   $('burn-select').value = '0';
@@ -981,7 +1095,7 @@ async function openProfile(username) {
           ${avatarHtml(u.username, u.avatar, 'lg')}
           <span class="dot-online ${u.isOnline ? '' : 'dot-off'}"></span>
         </div>
-        <div class="ph-name">${escapeHtml(u.username)} ${isAdmin ? '<span class="admin-badge">管理员</span>' : ''}</div>
+        <div class="ph-name">${escapeHtml(u.username)} ${isAdmin ? '<span class="admin-badge">' + t('me.adminBadge') + '</span>' : ''}</div>
         <div class="ph-meta">${u.isOnline ? '🟢 在线' : '⚪ 离线'} · 加入于 ${fmtDate(u.createdAt)}</div>
       </div>
     </div>
@@ -1044,38 +1158,38 @@ function renderMe() {
       <div class="me-orb me-orb2"></div>
       <div class="me-info">
         <div class="avatar-wrap">${avatarHtml(me.username, me.avatar, 'lg')}<span class="dot-online"></span></div>
-        <div class="me-name">${escapeHtml(me.username)} ${me.username === 'admin' ? '<span class="admin-badge">管理员</span>' : ''}</div>
-        <div class="me-desc">${escapeHtml(me.bio || '点击编辑头像与简介，让别人更想认识你')}</div>
+        <div class="me-name">${escapeHtml(me.username)} ${me.username === 'admin' ? '<span class="admin-badge">' + t('me.adminBadge') + '</span>' : ''}</div>
+        <div class="me-desc">${escapeHtml(me.bio || t('me.descPlaceholder'))}</div>
       </div>
     </div>
     <div class="me-grid">
       <div class="me-card" onclick="openSettings('profile')">
         <span class="me-ico" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">✏️</span>
-        <b>个人资料</b><i>头像 · 简介 · 兴趣标签</i>
+        <b>${t('me.profile')}</b><i>${t('me.profileSub')}</i>
       </div>
       <div class="me-card" onclick="openSettings('theme')">
         <span class="me-ico" style="background:linear-gradient(135deg,#8b5cf6,#c084fc)">🎨</span>
-        <b>主题皮肤</b><i>四套配色自由切换</i>
+        <b>${t('me.theme')}</b><i>${t('me.themeSub')}</i>
       </div>
       <div class="me-card" onclick="openSettings('background')">
         <span class="me-ico" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">🖼️</span>
-        <b>聊天背景</b><i>渐变或自定义图片</i>
+        <b>${t('me.chatBg')}</b><i>${t('me.chatBgSub')}</i>
       </div>
       <div class="me-card" onclick="openSettings('password')">
         <span class="me-ico" style="background:linear-gradient(135deg,#ef4444,#f87171)">🔑</span>
-        <b>修改密码</b><i>定期更换更安全</i>
+        <b>${t('me.password')}</b><i>${t('me.passwordSub')}</i>
       </div>
     </div>`;
 }
 
 function openSettings(type) {
   showView('view-settings');
-  showContent('设置');
+  showContent(t('nav.settings'));
   const el = $('settings-detail');
   if (type === 'profile') {
     el.innerHTML = `
       <div class="card">
-        <h2>个人资料</h2>
+        <h2>${t('set.profile')}</h2>
         <div class="avatar-edit">
           <div id="set-avatar-preview">${avatarHtml(me.username, me.avatar, 'lg')}</div>
           <div>
@@ -1106,21 +1220,21 @@ function openSettings(type) {
   } else if (type === 'theme') {
     el.innerHTML = `
       <div class="card">
-        <h2>主题皮肤</h2>
+        <h2>${t('set.theme')}</h2>
         <div style="font-size:12px;color:var(--muted);margin-top:2px;">切换后全局生效，立即预览</div>
         <div class="theme-grid">${renderThemeCards()}</div>
       </div>`;
   } else if (type === 'background') {
     el.innerHTML = `
       <div class="card">
-        <h2>聊天背景</h2>
+        <h2>${t('set.background')}</h2>
         <div style="font-size:12px;color:var(--muted);margin-top:2px;">进入聊天时生效，可随时更换</div>
         ${renderBgCards()}
       </div>`;
   } else if (type === 'password') {
     el.innerHTML = `
       <div class="card">
-        <h2>修改密码</h2>
+        <h2>${t('set.password')}</h2>
         <div class="form-group"><label>原密码</label><input id="set-old-pass" type="password" autocomplete="current-password"></div>
         <div class="form-group"><label>新密码（至少6位）</label><input id="set-new-pass" type="password" autocomplete="new-password"></div>
         <div class="form-group"><label>确认新密码</label><input id="set-new-pass2" type="password"></div>
@@ -1131,10 +1245,10 @@ function openSettings(type) {
 
 function renderThemeCards() {
   const themes = [
-    { id: 'ocean', name: '海洋青绿', sw: 'sw-ocean' },
-    { id: 'dark', name: '午夜暗黑', sw: 'sw-dark' },
-    { id: 'sunset', name: '日落暖橙', sw: 'sw-sunset' },
-    { id: 'nebula', name: '星空幻紫', sw: 'sw-nebula' }
+    { id: 'ocean', name: t('theme.ocean'), sw: 'sw-ocean' },
+    { id: 'dark', name: t('theme.dark'), sw: 'sw-dark' },
+    { id: 'sunset', name: t('theme.sunset'), sw: 'sw-sunset' },
+    { id: 'nebula', name: t('theme.nebula'), sw: 'sw-nebula' }
   ];
   return themes.map((t) => `
     <div class="theme-card ${me.theme === t.id ? 'active' : ''}" onclick="selectTheme('${t.id}')">

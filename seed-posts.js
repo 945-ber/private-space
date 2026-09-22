@@ -18,7 +18,7 @@ const seedPosts = [
     tags: ['讨论', '深度分析'], quality: 88, verdict: '深度分析'
   },
   {
-    title: '私密空间使用心法：如何让一场私聊不尴尬、有深度',
+    title: '树洞使用心法：如何让一场私聊不尴尬、有深度',
     content: '用这个产品有一阵了，分享几条让私聊质量更高的心得：\n\n1. 开场别问"在吗"，直接抛出你看到对方的话题/主页里感兴趣的点；\n2. 一次只聊一个话题，聊透再换；\n3. 遇到说不清的情绪，直接说"我现在需要的是倾听"；\n4. 聊完觉得投缘，主动约下一次。\n\n欢迎补充你的心得。',
     tags: ['经验分享', '讨论'], quality: 90, verdict: '经验分享'
   },
@@ -57,7 +57,7 @@ const seedPosts = [
     await users.insertOne({
       username: ADMIN,
       passwordHash: await bcrypt.hash(ADMIN_PASS, 10),
-      bio: '私密空间管理员 · 负责广场内容维护与秩序',
+      bio: '树洞管理员 · 负责广场内容维护与秩序',
       avatar: null,
       theme: 'ocean',
       chatBg: null,

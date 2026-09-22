@@ -1,5 +1,5 @@
 /**
- * 私密空间 —— 后端服务器（MongoDB 版）
+ * 树洞 —— 后端服务器（MongoDB 版）
  * 技术栈：Express + Socket.IO + bcryptjs + express-session + MongoDB(官方驱动)
  *
  * 数据库：本机 MongoDB，库名 private_chat
@@ -831,7 +831,7 @@ server.listen(PORT, async () => {
     process.exit(1);
   }
   console.log('==============================================');
-  console.log('  私密空间已启动（MongoDB 版）');
+  console.log('  树洞已启动（MongoDB 版）');
   console.log(`  本机访问:   http://localhost:${PORT}`);
   console.log(`  局域网访问: http://<你的电脑IP>:${PORT}`);
   console.log('==============================================');

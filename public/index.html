@@ -3,17 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>私密空间 · 登录</title>
+  <title>树洞 · 登录</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="lang-switch">
+    <button onclick="setLang('zh')">中文</button>
+    <button onclick="setLang('en')">EN</button>
+    <button onclick="setLang('fr')">FR</button>
+    <button onclick="setLang('de')">DE</button>
+  </div>
+
   <!-- 欢迎开场动画（同会话只播一次） -->
   <div class="auth-intro" id="auth-intro">
     <div class="intro-particles" id="intro-particles"></div>
-    <img src="logo.svg" class="intro-logo" alt="私密空间">
+    <img src="logo.svg" class="intro-logo" alt="logo">
     <div class="intro-title" id="intro-title"></div>
-    <div class="intro-sub">话题广场 · 专属房间 · 私密交流</div>
+    <div class="intro-sub" id="intro-sub"></div>
   </div>
 
   <div class="auth-wrap">
@@ -22,52 +29,66 @@
     <div class="auth-orb auth-orb-3"></div>
     <div class="auth-orb auth-orb-4"></div>
     <div class="auth-card">
-      <div class="auth-logo"><img src="logo.svg" alt="私密空间"></div>
-      <h1>私密空间</h1>
-      <p class="subtitle">话题广场 · 专属房间 · 私密交流</p>
+      <div class="auth-logo"><img src="logo.svg" alt="logo"></div>
+      <h1 data-i18n="app">树洞</h1>
+      <p class="subtitle" data-i18n="sub">话题广场 · 专属房间 · 私密交流</p>
 
-      <!-- 登录 / 注册 切换 -->
       <div class="tabs">
-        <button id="tab-login" class="active" onclick="switchTab('login')">登录</button>
-        <button id="tab-register" onclick="switchTab('register')">注册</button>
+        <button id="tab-login" class="active" onclick="switchTab('login')" data-i18n="login">登录</button>
+        <button id="tab-register" onclick="switchTab('register')" data-i18n="register">注册</button>
       </div>
 
-      <!-- 提示信息 -->
       <div id="msg" class="msg"></div>
 
-      <!-- 登录表单 -->
       <form id="form-login" onsubmit="return submitLogin(event)">
         <div class="form-group">
-          <label>用户名</label>
-          <input id="login-user" type="text" autocomplete="username" placeholder="输入用户名" required>
+          <label data-i18n="user">用户名</label>
+          <input id="login-user" type="text" autocomplete="username" data-i18n-ph="phUser" placeholder="输入用户名" required>
         </div>
         <div class="form-group">
-          <label>密码</label>
-          <input id="login-pass" type="password" autocomplete="current-password" placeholder="输入密码" required>
+          <label data-i18n="pass">密码</label>
+          <input id="login-pass" type="password" autocomplete="current-password" data-i18n-ph="phPass" placeholder="输入密码" required>
         </div>
-        <button class="btn" type="submit">登 录</button>
+        <button class="btn" type="submit" data-i18n="loginBtn">登 录</button>
       </form>
 
-      <!-- 注册表单（默认隐藏） -->
       <form id="form-register" class="hidden" onsubmit="return submitRegister(event)">
         <div class="form-group">
-          <label>用户名（2-20位字母/数字/下划线/中文）</label>
-          <input id="reg-user" type="text" autocomplete="username" placeholder="设置用户名" required>
+          <label data-i18n="regUser">用户名（2-20位字母/数字/下划线/中文）</label>
+          <input id="reg-user" type="text" autocomplete="username" data-i18n-ph="phRegUser" placeholder="设置用户名" required>
         </div>
         <div class="form-group">
-          <label>密码（至少6位）</label>
-          <input id="reg-pass" type="password" autocomplete="new-password" placeholder="设置密码" required>
+          <label data-i18n="regPass">密码（至少6位）</label>
+          <input id="reg-pass" type="password" autocomplete="new-password" data-i18n-ph="phRegPass" placeholder="设置密码" required>
         </div>
         <div class="form-group">
-          <label>确认密码</label>
-          <input id="reg-pass2" type="password" autocomplete="new-password" placeholder="再次输入密码" required>
+          <label data-i18n="regPass2">确认密码</label>
+          <input id="reg-pass2" type="password" autocomplete="new-password" data-i18n-ph="phRegPass2" placeholder="再次输入密码" required>
         </div>
-        <button class="btn" type="submit">注 册</button>
+        <button class="btn" type="submit" data-i18n="regBtn">注 册</button>
       </form>
     </div>
   </div>
 
   <script>
+    // ===== 多语言（登录页）=====
+    var I18N = {
+      zh: { app:'树洞', sub:'话题广场 · 专属房间 · 私密交流', login:'登录', register:'注册', user:'用户名', pass:'密码', loginBtn:'登 录', regBtn:'注 册', regUser:'用户名（2-20位字母/数字/下划线/中文）', regPass:'密码（至少6位）', regPass2:'确认密码', phUser:'输入用户名', phPass:'输入密码', phRegUser:'设置用户名', phRegPass:'设置密码', phRegPass2:'再次输入密码', errDiff:'两次输入的密码不一致', errLogin:'登录失败', errReg:'注册失败' },
+      en: { app:'Tree Hole', sub:'Topics · Private Rooms · Secret Chat', login:'Log in', register:'Sign up', user:'Username', pass:'Password', loginBtn:'Log In', regBtn:'Sign Up', regUser:'Username (2-20 letters, numbers, _ or Chinese)', regPass:'Password (at least 6 chars)', regPass2:'Confirm password', phUser:'Enter username', phPass:'Enter password', phRegUser:'Choose username', phRegPass:'Choose password', phRegPass2:'Repeat password', errDiff:'Passwords do not match', errLogin:'Login failed', errReg:'Registration failed' },
+      fr: { app:'Trou d\u2019arbre', sub:'Sujets · Chambres priv\u00e9es · Discussions secr\u00e8tes', login:'Connexion', register:'Inscription', user:'Nom d\u2019utilisateur', pass:'Mot de passe', loginBtn:'Se connecter', regBtn:'S\u2019inscrire', regUser:'Nom (2-20 lettres, chiffres, _ ou chinois)', regPass:'Mot de passe (6 caract\u00e8res min.)', regPass2:'Confirmer le mot de passe', phUser:'Entrer le nom', phPass:'Entrer le mot de passe', phRegUser:'Choisir un nom', phRegPass:'Choisir un mot de passe', phRegPass2:'R\u00e9p\u00e9ter le mot de passe', errDiff:'Les mots de passe diff\u00e8rent', errLogin:'\u00c9chec de connexion', errReg:'\u00c9chec d\u2019inscription' },
+      de: { app:'Baumloch', sub:'Themen · Private R\u00e4ume · Geheimer Chat', login:'Anmelden', register:'Registrieren', user:'Benutzername', pass:'Passwort', loginBtn:'Anmelden', regBtn:'Registrieren', regUser:'Name (2-20 Buchstaben, Zahlen, _ oder Chinesisch)', regPass:'Passwort (mind. 6 Zeichen)', regPass2:'Passwort best\u00e4tigen', phUser:'Benutzername eingeben', phPass:'Passwort eingeben', phRegUser:'Benutzername w\u00e4hlen', phRegPass:'Passwort w\u00e4hlen', phRegPass2:'Passwort wiederholen', errDiff:'Passw\u00f6rter stimmen nicht \u00fcberein', errLogin:'Anmeldung fehlgeschlagen', errReg:'Registrierung fehlgeschlagen' }
+    };
+    var lang = localStorage.getItem('sd_lang') || 'zh';
+    function t(key) { return (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key; }
+    function applyLang() {
+      document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
+      document.querySelectorAll('[data-i18n-ph]').forEach(function (el) { el.placeholder = t(el.getAttribute('data-i18n-ph')); });
+      document.documentElement.lang = lang;
+      var introT = document.getElementById('intro-title');
+      if (introT && !introT.dataset.played) introT.dataset.text = t('app');
+    }
+    function setLang(l) { lang = l; localStorage.setItem('sd_lang', l); applyLang(); }
+
     // 欢迎开场动画：同一会话只播放一次，之后直接进入登录
     (function () {
       const intro = document.getElementById('auth-intro');
@@ -78,7 +99,7 @@
         return;
       }
       sessionStorage.setItem('welcomed', '1');
-      // 生成漂浮粒子
+      document.getElementById('intro-sub').textContent = t('sub');
       const wrap = document.getElementById('intro-particles');
       for (let i = 0; i < 16; i++) {
         const d = document.createElement('span');
@@ -89,19 +110,19 @@
         d.style.animationDuration = (4 + Math.random() * 6) + 's';
         wrap.appendChild(d);
       }
-      // 标题逐字浮现
-      const t = document.getElementById('intro-title');
-      const text = '私密空间';
+      const tt = document.getElementById('intro-title');
+      const text = t('app');
+      tt.dataset.text = text;
       let i = 0;
       const iv = setInterval(() => {
-        t.textContent = text.slice(0, ++i);
+        tt.textContent = text.slice(0, ++i);
         if (i >= text.length) clearInterval(iv);
       }, 190);
-      // 2.5s 后开场层上移淡出，露出登录页
       setTimeout(() => intro.classList.add('hide'), 2500);
     })();
 
-    // 切换登录/注册 tab
+    applyLang();
+
     function switchTab(tab) {
       document.getElementById('tab-login').classList.toggle('active', tab === 'login');
       document.getElementById('tab-register').classList.toggle('active', tab === 'register');
@@ -134,7 +155,7 @@
       if (result.ok) {
         location.href = 'chat.html';
       } else {
-        showMsg(result.error || '登录失败', 'error');
+        showMsg(result.error || t('errLogin'), 'error');
       }
     }
 
@@ -144,18 +165,17 @@
       const password = document.getElementById('reg-pass').value;
       const password2 = document.getElementById('reg-pass2').value;
       if (password !== password2) {
-        showMsg('两次输入的密码不一致', 'error');
+        showMsg(t('errDiff'), 'error');
         return;
       }
       const result = await api('/api/register', { username, password });
       if (result.ok) {
         location.href = 'chat.html';
       } else {
-        showMsg(result.error || '注册失败', 'error');
+        showMsg(result.error || t('errReg'), 'error');
       }
     }
 
-    // 已登录则直接进入聊天室
     (async function () {
       const res = await fetch('/api/me', { credentials: 'include' });
       const data = await res.json();

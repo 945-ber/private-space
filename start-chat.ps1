@@ -1,5 +1,5 @@
-﻿# ============================================================
-# 私密空间 · 一键启动脚本
+# ============================================================
+# 树洞 · 一键启动脚本
 # 功能：启动 MongoDB → 启动聊天服务器 → 提示公网方式
 # 使用：右键「使用 PowerShell 运行」，或 PowerShell 里执行 .\start-chat.ps1
 # 公网隧道请另运行「刷新隧道.bat」
@@ -11,7 +11,7 @@ $DBPATH = 'C:\mongodb\data_new'
 $PROJECT = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 Write-Host "==============================================" -ForegroundColor Cyan
-Write-Host "  私密空间一键启动" -ForegroundColor Cyan
+Write-Host "  树洞一键启动" -ForegroundColor Cyan
 Write-Host "==============================================" -ForegroundColor Cyan
 
 # ---------- 1. 启动 MongoDB ----------
