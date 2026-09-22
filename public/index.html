@@ -73,13 +73,15 @@
   <script>
     // ===== 多语言（登录页）=====
     var I18N = {
-      zh: { app:'树洞', sub:'话题广场 · 专属房间 · 私密交流', login:'登录', register:'注册', user:'用户名', pass:'密码', loginBtn:'登 录', regBtn:'注 册', regUser:'用户名（2-20位字母/数字/下划线/中文）', regPass:'密码（至少6位）', regPass2:'确认密码', phUser:'输入用户名', phPass:'输入密码', phRegUser:'设置用户名', phRegPass:'设置密码', phRegPass2:'再次输入密码', errDiff:'两次输入的密码不一致', errLogin:'登录失败', errReg:'注册失败' },
-      en: { app:'Tree Hole', sub:'Topics · Private Rooms · Secret Chat', login:'Log in', register:'Sign up', user:'Username', pass:'Password', loginBtn:'Log In', regBtn:'Sign Up', regUser:'Username (2-20 letters, numbers, _ or Chinese)', regPass:'Password (at least 6 chars)', regPass2:'Confirm password', phUser:'Enter username', phPass:'Enter password', phRegUser:'Choose username', phRegPass:'Choose password', phRegPass2:'Repeat password', errDiff:'Passwords do not match', errLogin:'Login failed', errReg:'Registration failed' },
-      fr: { app:'Trou d\u2019arbre', sub:'Sujets · Chambres priv\u00e9es · Discussions secr\u00e8tes', login:'Connexion', register:'Inscription', user:'Nom d\u2019utilisateur', pass:'Mot de passe', loginBtn:'Se connecter', regBtn:'S\u2019inscrire', regUser:'Nom (2-20 lettres, chiffres, _ ou chinois)', regPass:'Mot de passe (6 caract\u00e8res min.)', regPass2:'Confirmer le mot de passe', phUser:'Entrer le nom', phPass:'Entrer le mot de passe', phRegUser:'Choisir un nom', phRegPass:'Choisir un mot de passe', phRegPass2:'R\u00e9p\u00e9ter le mot de passe', errDiff:'Les mots de passe diff\u00e8rent', errLogin:'\u00c9chec de connexion', errReg:'\u00c9chec d\u2019inscription' },
-      de: { app:'Baumloch', sub:'Themen · Private R\u00e4ume · Geheimer Chat', login:'Anmelden', register:'Registrieren', user:'Benutzername', pass:'Passwort', loginBtn:'Anmelden', regBtn:'Registrieren', regUser:'Name (2-20 Buchstaben, Zahlen, _ oder Chinesisch)', regPass:'Passwort (mind. 6 Zeichen)', regPass2:'Passwort best\u00e4tigen', phUser:'Benutzername eingeben', phPass:'Passwort eingeben', phRegUser:'Benutzername w\u00e4hlen', phRegPass:'Passwort w\u00e4hlen', phRegPass2:'Passwort wiederholen', errDiff:'Passw\u00f6rter stimmen nicht \u00fcberein', errLogin:'Anmeldung fehlgeschlagen', errReg:'Registrierung fehlgeschlagen' }
+      zh: { app:'树洞', sub:'话题广场 · 专属房间 · 私密交流', login:'登录', register:'注册', user:'用户名', pass:'密码', loginBtn:'登 录', regBtn:'注 册', regUser:'用户名（2-20位字母/数字/下划线/中文）', regPass:'密码（至少6位）', regPass2:'确认密码', phUser:'输入用户名', phPass:'输入密码', phRegUser:'设置用户名', phRegPass:'设置密码', phRegPass2:'再次输入密码', errDiff:'两次输入的密码不一致', errLogin:'登录失败', errReg:'注册失败', errBadLogin:'用户名或密码错误', errTaken:'该用户名已被注册', errEmpty:'用户名和密码不能为空', errBadFmt:'用户名需为2-20位字母/数字/下划线/中文', errPwd:'密码至少 6 位', errServer:'服务器内部错误' },
+      en: { app:'Tree Hole', sub:'Topics · Private Rooms · Secret Chat', login:'Log in', register:'Sign up', user:'Username', pass:'Password', loginBtn:'Log In', regBtn:'Sign Up', regUser:'Username (2-20 letters, numbers, _ or Chinese)', regPass:'Password (at least 6 chars)', regPass2:'Confirm password', phUser:'Enter username', phPass:'Enter password', phRegUser:'Choose username', phRegPass:'Choose password', phRegPass2:'Repeat password', errDiff:'Passwords do not match', errLogin:'Login failed', errReg:'Registration failed', errBadLogin:'Wrong username or password', errTaken:'Username already taken', errEmpty:'Username and password required', errBadFmt:'Username must be 2-20 characters', errPwd:'Password at least 6 characters', errServer:'Server error' },
+      fr: { app:'Trou d\u2019arbre', sub:'Sujets · Chambres priv\u00e9es · Discussions secr\u00e8tes', login:'Connexion', register:'Inscription', user:'Nom d\u2019utilisateur', pass:'Mot de passe', loginBtn:'Se connecter', regBtn:'S\u2019inscrire', regUser:'Nom (2-20 lettres, chiffres, _ ou chinois)', regPass:'Mot de passe (6 caract\u00e8res min.)', regPass2:'Confirmer le mot de passe', phUser:'Entrer le nom', phPass:'Entrer le mot de passe', phRegUser:'Choisir un nom', phRegPass:'Choisir un mot de passe', phRegPass2:'R\u00e9p\u00e9ter le mot de passe', errDiff:'Les mots de passe diff\u00e8rent', errLogin:'\u00c9chec de connexion', errReg:'\u00c9chec d\u2019inscription', errBadLogin:'Nom ou mot de passe incorrect', errTaken:'Ce nom est d\u00e9j\u00e0 pris', errEmpty:'Nom et mot de passe requis', errBadFmt:'Le nom doit faire 2-20 caract\u00e8res', errPwd:'Mot de passe : 6 caract\u00e8res min.', errServer:'Erreur serveur' },
+      de: { app:'Baumloch', sub:'Themen · Private R\u00e4ume · Geheimer Chat', login:'Anmelden', register:'Registrieren', user:'Benutzername', pass:'Passwort', loginBtn:'Anmelden', regBtn:'Registrieren', regUser:'Name (2-20 Buchstaben, Zahlen, _ oder Chinesisch)', regPass:'Passwort (mind. 6 Zeichen)', regPass2:'Passwort best\u00e4tigen', phUser:'Benutzername eingeben', phPass:'Passwort eingeben', phRegUser:'Benutzername w\u00e4hlen', phRegPass:'Passwort w\u00e4hlen', phRegPass2:'Passwort wiederholen', errDiff:'Passw\u00f6rter stimmen nicht \u00fcberein', errLogin:'Anmeldung fehlgeschlagen', errReg:'Registrierung fehlgeschlagen', errBadLogin:'Falscher Benutzername oder falsches Passwort', errTaken:'Benutzername bereits vergeben', errEmpty:'Benutzername und Passwort erforderlich', errBadFmt:'Benutzername: 2-20 Zeichen', errPwd:'Passwort: mindestens 6 Zeichen', errServer:'Serverfehler' }
     };
     var lang = localStorage.getItem('sd_lang') || 'zh';
     function t(key) { return (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key; }
+    var ERR_MAP = { '用户名或密码错误':'errBadLogin', '该用户名已被注册':'errTaken', '用户名和密码不能为空':'errEmpty', '用户名需为2-20位字母/数字/下划线/中文':'errBadFmt', '密码至少 6 位':'errPwd', '服务器内部错误':'errServer' };
+    function eMsg(e) { return (typeof e === 'string' && ERR_MAP[e]) ? t(ERR_MAP[e]) : e; }
     function applyLang() {
       document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
       document.querySelectorAll('[data-i18n-ph]').forEach(function (el) { el.placeholder = t(el.getAttribute('data-i18n-ph')); });
@@ -155,7 +157,7 @@
       if (result.ok) {
         location.href = 'chat.html';
       } else {
-        showMsg(result.error || t('errLogin'), 'error');
+        showMsg(eMsg(result.error) || t('errLogin'), 'error');
       }
     }
 
@@ -172,7 +174,7 @@
       if (result.ok) {
         location.href = 'chat.html';
       } else {
-        showMsg(result.error || t('errReg'), 'error');
+        showMsg(eMsg(result.error) || t('errReg'), 'error');
       }
     }
 
