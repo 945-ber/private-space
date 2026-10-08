@@ -26,10 +26,10 @@ const ai = require('./ai'); // AI 版主 + 智能回复（火山方舟/豆包，
 // ============================================================
 // 一、基础配置
 // ============================================================
-const PORT = 3000;
-const MONGODB_URL = 'mongodb://127.0.0.1:27017'; // 本机 MongoDB
+const PORT = Number(process.env.PORT) || 3000;
+const MONGODB_URL = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017'; // 云端部署用环境变量，本地默认本机 MongoDB
 const DB_NAME = 'private_chat';
-const SESSION_SECRET = crypto.randomBytes(32).toString('hex');
+const SESSION_SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
 const THEMES = ['ocean', 'dark', 'sunset', 'nebula'];
 // 管理员账户：可删除广场任意帖子（含他人）
 const ADMIN_USER = 'admin';
