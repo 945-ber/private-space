@@ -1402,3 +1402,81 @@ body {
   .lang-switch { top: 10px; right: 10px; }
   .lang-switch button { padding: 4px 8px; font-size: 11px; }
 }
+
+/* ---------- 公网分享地址条 ---------- */
+.share-bar {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 180px);
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(20, 30, 40, 0.82);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  font-size: 12px;
+}
+.share-bar.hidden { display: none; }
+.share-label { color: rgba(255,255,255,0.65); white-space: nowrap; }
+.share-bar a {
+  color: #7dd3fc;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.share-bar a:hover { text-decoration: underline; }
+.share-copy {
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+}
+.share-copy:active { transform: scale(0.95); }
+@media (max-width: 768px) {
+  .share-bar { top: 10px; left: 10px; max-width: calc(100vw - 130px); padding: 6px 10px; }
+}
+
+/* 聊天页侧栏里的分享地址 */
+.nav-share {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 10px 4px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: rgba(128, 128, 128, 0.1);
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+.nav-share.hidden { display: none; }
+.nav-share .share-label { color: var(--text-secondary, #8b9bb4); white-space: nowrap; }
+.nav-share a {
+  color: var(--accent, #0ea5e9);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 130px;
+  font-weight: 600;
+}
+.nav-share a:hover { text-decoration: underline; }
+.nav-share .share-copy {
+  border: none;
+  cursor: pointer;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #fff;
+  background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+}
+.nav-share .share-copy:active { transform: scale(0.95); }

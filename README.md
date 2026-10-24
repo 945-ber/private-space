@@ -2,6 +2,12 @@
 
 一个账号密码登录的实时社交网站：话题广场（发帖 / 回帖 / AI 打标筛选）+ 私密房间（实时聊天 / 阅后即焚）+ 私信 + 个性化设置。基于 Node.js + Express + Socket.IO + MongoDB，前后端一体，浏览器直接访问。
 
+## 界面预览
+
+| 电脑端 | 手机端 |
+|---|---|
+| ![电脑端登录页](screenshots/login-desktop.png) | ![手机端登录页](screenshots/login-mobile.png) |
+
 ## 功能
 
 - 账号体系：注册 / 登录 / 修改密码，会话 24 小时有效

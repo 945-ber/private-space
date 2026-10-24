@@ -7,6 +7,14 @@ node_modules/
 # 敏感配置：AI API Key 放在这里，绝不入库
 ai.config.json
 
+# 本地敏感配置：数据库连接串 / 会话密钥 / API Key，绝不入库
+secrets.env
+
+# 公网隧道二进制与运行时产物（本地下载/生成，不入库）
+cloudflared.exe
+cloudflared-old.exe
+tunnel-url.txt
+
 # 系统杂项
 .DS_Store
 Thumbs.db

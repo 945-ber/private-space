@@ -25,7 +25,7 @@ const $ = (id) => document.getElementById(id);
 const LANGS = ['zh', 'en', 'fr', 'de'];
 const I18N = {
   zh: {
-    appName:'树洞', 'nav.square':'广场', 'nav.rooms':'房间', 'nav.dms':'私信', 'nav.me':'我的', 'nav.system':'系统', 'nav.logout':'退出', 'nav.settings':'设置',
+    appName:'树洞', 'nav.square':'广场', 'nav.rooms':'房间', 'nav.dms':'私信', 'nav.me':'我的', 'nav.system':'系统', 'nav.logout':'退出', 'nav.settings':'设置', 'share':'分享地址', 'copy':'复制', 'copied':'已复制',
     'panel.square':'话题广场', 'panel.rooms':'我的房间', 'panel.dms':'私信', 'panel.me':'我的空间', 'panel.system':'系统设置',
     'btn.newPost':'＋ 发帖', 'btn.createRoom':'＋ 创建房间', 'btn.joinRoom':'🔑 加入房间', 'btn.findUser':'＋ 找人', 'btn.leave':'离开', 'btn.send':'发送', 'btn.confirm':'确定', 'btn.cancel':'取消', 'btn.publish':'发布', 'btn.edit':'编辑', 'btn.search':'搜索', 'btn.comment':'评论',
     'ph.joinId':'输入房间号，回车加入', 'ph.roomName':'给你的房间起个名字', 'ph.roomPass':'设置访问密码', 'ph.roomId':'8位房间号', 'ph.message':'输入消息，回车发送...', 'ph.postTitle':'想聊点什么？', 'ph.postContent':'写下你的想法...', 'ph.comment':'写下你的评论...',
@@ -56,7 +56,7 @@ const I18N = {
     'err.notLogin':'未登录', 'err.emptyCred':'用户名和密码不能为空', 'err.badUserFmt':'用户名需为2-20位字母/数字/下划线/中文', 'err.pwdShort':'密码至少 6 位', 'err.userTaken':'该用户名已被注册', 'err.server':'服务器内部错误', 'err.needCred':'请输入用户名和密码', 'err.badLogin':'用户名或密码错误', 'err.oldPwd':'原密码错误', 'err.avatarBig':'头像图片过大（需小于约300KB）', 'err.bioLong':'简介最多 200 字', 'err.noUser':'用户不存在', 'err.noPost':'帖子不存在', 'err.noPerm':'只有作者或管理员可以删除', 'err.selfDm':'不能和自己私信', 'err.inviteGone':'申请不存在或已处理', 'err.titleLong':'标题不能为空且不超过60字', 'err.contentLong':'内容不能为空且不超过5000字', 'err.commentEmpty':'评论不能为空', 'err.aiGen':'生成失败', 'err.roomName':'房间名不能为空且不超过30字', 'err.roomGone':'房间不存在，请检查房间号', 'err.roomPwd':'房间密码错误', 'err.roomMissing':'房间不存在', 'err.notMember':'你不是该房间成员'
   },
   en: {
-    appName:'Tree Hole', 'nav.square':'Square', 'nav.rooms':'Rooms', 'nav.dms':'Messages', 'nav.me':'Me', 'nav.system':'System', 'nav.logout':'Log out', 'nav.settings':'Settings',
+    appName:'Tree Hole', 'nav.square':'Square', 'nav.rooms':'Rooms', 'nav.dms':'Messages', 'nav.me':'Me', 'nav.system':'System', 'nav.logout':'Log out', 'nav.settings':'Settings', 'share':'Share link', 'copy':'Copy', 'copied':'Copied',
     'panel.square':'Topics', 'panel.rooms':'My Rooms', 'panel.dms':'Messages', 'panel.me':'My Space', 'panel.system':'System',
     'btn.newPost':'＋ New post', 'btn.createRoom':'＋ Create room', 'btn.joinRoom':'🔑 Join room', 'btn.findUser':'＋ Find', 'btn.leave':'Leave', 'btn.send':'Send', 'btn.confirm':'Confirm', 'btn.cancel':'Cancel', 'btn.publish':'Publish', 'btn.edit':'Edit', 'btn.search':'Search', 'btn.comment':'Comment',
     'ph.joinId':'Enter room id, press Enter to join', 'ph.roomName':'Name your room', 'ph.roomPass':'Set a password', 'ph.roomId':'8-digit room id', 'ph.message':'Type a message, Enter to send...', 'ph.postTitle':'What do you want to talk about?', 'ph.postContent':'Write your thoughts...', 'ph.comment':'Write a comment...',
@@ -87,7 +87,7 @@ const I18N = {
     'err.notLogin':'Not logged in', 'err.emptyCred':'Username and password required', 'err.badUserFmt':'Username must be 2-20 characters', 'err.pwdShort':'Password at least 6 characters', 'err.userTaken':'Username already taken', 'err.server':'Server error', 'err.needCred':'Enter username and password', 'err.badLogin':'Wrong username or password', 'err.oldPwd':'Wrong current password', 'err.avatarBig':'Avatar too large (under 300KB)', 'err.bioLong':'Bio max 200 characters', 'err.noUser':'User not found', 'err.noPost':'Post not found', 'err.noPerm':'Only the author or admin can delete', 'err.selfDm':'Cannot message yourself', 'err.inviteGone':'Request missing or already handled', 'err.titleLong':'Title required, max 60 characters', 'err.contentLong':'Content required, max 5000 characters', 'err.commentEmpty':'Comment cannot be empty', 'err.aiGen':'Generation failed', 'err.roomName':'Room name required, max 30 characters', 'err.roomGone':'Room not found, check the id', 'err.roomPwd':'Wrong room password', 'err.roomMissing':'Room not found', 'err.notMember':'You are not a member'
   },
   fr: {
-    appName:'Trou d\u2019arbre', 'nav.square':'Place', 'nav.rooms':'Chambres', 'nav.dms':'Messages', 'nav.me':'Profil', 'nav.system':'Syst\u00e8me', 'nav.logout':'D\u00e9connexion', 'nav.settings':'R\u00e9glages',
+    appName:'Trou d\u2019arbre', 'nav.square':'Place', 'nav.rooms':'Chambres', 'nav.dms':'Messages', 'nav.me':'Profil', 'nav.system':'Syst\u00e8me', 'nav.logout':'D\u00e9connexion', 'nav.settings':'R\u00e9glages', 'share':'Lien de partage', 'copy':'Copier', 'copied':'Copi\u00e9',
     'panel.square':'Sujets', 'panel.rooms':'Mes chambres', 'panel.dms':'Messages', 'panel.me':'Mon espace', 'panel.system':'Syst\u00e8me',
     'btn.newPost':'＋ Nouveau sujet', 'btn.createRoom':'＋ Cr\u00e9er une chambre', 'btn.joinRoom':'🔑 Rejoindre', 'btn.findUser':'＋ Chercher', 'btn.leave':'Quitter', 'btn.send':'Envoyer', 'btn.confirm':'Confirmer', 'btn.cancel':'Annuler', 'btn.publish':'Publier', 'btn.edit':'Modifier', 'btn.search':'Chercher', 'btn.comment':'Commenter',
     'ph.joinId':'Entrer un n\u00b0 de chambre', 'ph.roomName':'Nommez votre chambre', 'ph.roomPass':'D\u00e9finir un mot de passe', 'ph.roomId':'N\u00b0 \u00e0 8 chiffres', 'ph.message':'Saisir un message, Entr\u00e9e pour envoyer...', 'ph.postTitle':'De quoi parler ?', 'ph.postContent':'\u00c9crivez vos pens\u00e9es...', 'ph.comment':'\u00c9crivez un commentaire...',
@@ -118,7 +118,7 @@ const I18N = {
     'err.notLogin':'Non connect\u00e9', 'err.emptyCred':'Nom et mot de passe requis', 'err.badUserFmt':'Le nom doit faire 2-20 caract\u00e8res', 'err.pwdShort':'Mot de passe : 6 caract\u00e8res min.', 'err.userTaken':'Ce nom est d\u00e9j\u00e0 pris', 'err.server':'Erreur serveur', 'err.needCred':'Entrez nom et mot de passe', 'err.badLogin':'Nom ou mot de passe incorrect', 'err.oldPwd':'Mot de passe actuel incorrect', 'err.avatarBig':'Avatar trop lourd (moins de 300KB)', 'err.bioLong':'Bio : 200 caract\u00e8res max', 'err.noUser':'Utilisateur introuvable', 'err.noPost':'Sujet introuvable', 'err.noPerm':'Seul l\u2019auteur ou l\u2019admin peut supprimer', 'err.selfDm':'Impossible de s\u2019\u00e9crire', 'err.inviteGone':'Demande introuvable ou d\u00e9j\u00e0 trait\u00e9e', 'err.titleLong':'Titre requis, 60 caract\u00e8res max', 'err.contentLong':'Contenu requis, 5000 caract\u00e8res max', 'err.commentEmpty':'Le commentaire ne peut pas \u00eatre vide', 'err.aiGen':'G\u00e9n\u00e9ration \u00e9chou\u00e9e', 'err.roomName':'Nom requis, 30 caract\u00e8res max', 'err.roomGone':'Chambre introuvable, v\u00e9rifiez le n\u00b0', 'err.roomPwd':'Mot de passe incorrect', 'err.roomMissing':'Chambre introuvable', 'err.notMember':'Vous n\u2019\u00eates pas membre'
   },
   de: {
-    appName:'Baumloch', 'nav.square':'Platz', 'nav.rooms':'R\u00e4ume', 'nav.dms':'Nachrichten', 'nav.me':'Ich', 'nav.system':'System', 'nav.logout':'Abmelden', 'nav.settings':'Einstellungen',
+    appName:'Baumloch', 'nav.square':'Platz', 'nav.rooms':'R\u00e4ume', 'nav.dms':'Nachrichten', 'nav.me':'Ich', 'nav.system':'System', 'nav.logout':'Abmelden', 'nav.settings':'Einstellungen', 'share':'Teilen-Link', 'copy':'Kopieren', 'copied':'Kopiert',
     'panel.square':'Themen', 'panel.rooms':'Meine R\u00e4ume', 'panel.dms':'Nachrichten', 'panel.me':'Mein Bereich', 'panel.system':'System',
     'btn.newPost':'＋ Neuer Beitrag', 'btn.createRoom':'＋ Raum erstellen', 'btn.joinRoom':'🔑 Beitreten', 'btn.findUser':'＋ Suchen', 'btn.leave':'Verlassen', 'btn.send':'Senden', 'btn.confirm':'Best\u00e4tigen', 'btn.cancel':'Abbrechen', 'btn.publish':'Ver\u00f6ffentlichen', 'btn.edit':'Bearbeiten', 'btn.search':'Suchen', 'btn.comment':'Kommentieren',
     'ph.joinId':'Raumnummer eingeben, Enter zum Beitreten', 'ph.roomName':'Name deinen Raum', 'ph.roomPass':'Passwort festlegen', 'ph.roomId':'8-stellige Raumnummer', 'ph.message':'Nachricht eingeben, Enter zum Senden...', 'ph.postTitle':'Wor\u00fcber m\u00f6chtest du reden?', 'ph.postContent':'Schreibe deine Gedanken...', 'ph.comment':'Schreibe einen Kommentar...',
@@ -354,8 +354,37 @@ function mobileBack() {
   loadDmBadge();
   checkAi();
   applyLang();
+  loadNavShareUrl();
   switchNav('square');
 })();
+
+// 公网分享地址（仅本地访问时显示，公网访问自身不需要提示）
+async function loadNavShareUrl() {
+  try {
+    const r = await fetch('/api/tunnel-url', { credentials: 'include' });
+    const d = await r.json();
+    if (!d.url) return;
+    const cur = location.origin;
+    const isLocal = cur.indexOf('localhost') >= 0 || cur.indexOf('127.0.0.1') >= 0 || cur.indexOf('192.168') >= 0;
+    if (!isLocal) return;
+    const a = document.getElementById('nav-share-url');
+    a.textContent = d.url;
+    a.href = d.url;
+    document.getElementById('nav-share').classList.remove('hidden');
+  } catch (e) { /* 忽略 */ }
+}
+function copyNavUrl() {
+  const txt = document.getElementById('nav-share-url').textContent;
+  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).catch(function () {
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove();
+  }).then(function () {
+    const b = document.getElementById('nav-share-copy');
+    b.textContent = t('copied');
+    setTimeout(function () { b.textContent = t('copy'); }, 1600);
+  });
+}
 
 function renderNavUser() {
   $('nav-username').textContent = me.username;

@@ -17,6 +17,11 @@
         <img src="logo.svg" alt="logo" class="nav-logo">
         <span data-i18n="appName">树洞</span>
       </div>
+      <div class="nav-share hidden" id="nav-share">
+        <span class="share-label" data-i18n="share">分享地址</span>
+        <a id="nav-share-url" href="#" target="_blank"></a>
+        <button class="share-copy" id="nav-share-copy" onclick="copyNavUrl()" data-i18n="copy">复制</button>
+      </div>
       <div class="nav-item active" data-view="square" onclick="switchNav('square')">
         <span class="nav-ico">🌐</span><span data-i18n="nav.square">广场</span>
       </div>

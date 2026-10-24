@@ -14,6 +14,7 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 const crypto = require('crypto');
 const http = require('http');
 const express = require('express');
@@ -197,6 +198,16 @@ app.post('/api/login', async (req, res) => {
 // 登出
 app.post('/api/logout', (req, res) => {
   req.session.destroy(() => res.json({ ok: true }));
+});
+
+// 当前公网访问地址（由守护脚本写入 tunnel-url.txt；未配置时回退本地）
+app.get('/api/tunnel-url', (req, res) => {
+  let url = '';
+  try {
+    const f = path.join(__dirname, 'tunnel-url.txt');
+    if (fs.existsSync(f)) url = fs.readFileSync(f, 'utf8').trim();
+  } catch (e) { /* 忽略 */ }
+  res.json({ url });
 });
 
 // 当前登录用户（含个性化资料）
